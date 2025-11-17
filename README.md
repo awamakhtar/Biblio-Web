@@ -21,11 +21,6 @@ Mise en page responsive
 tyles avancés (CSS)
 
 
-
-# À propos
-Biblio Web est une bibliothèque en ligne moderne qui vise à digitaliser l'accès à la lecture et à la culture. Notre plateforme permet à chacun de découvrir, emprunter et gérer facilement sa collection de livres préférés, où qu'il se trouve.
-
-
 # Technologies utilisées
 HTML-CSS
 Javascript
