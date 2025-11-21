@@ -48,23 +48,24 @@ $image_livre = isset($images_livres[$livre['id']]) ? $images_livres[$livre['id']
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar">
-        <h1 class="logo">📚 Biblio Web</h1>
-        
-        <ul class="nav-link">
-            <li><a href="index.php">Accueil</a></li>
-            <li><a href="wishlist.php">Liste de Lecture</a></li>
-            <li><a href="apropos.php">À propos</a></li>
-        </ul> 
-        
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        
-        <button class="button">
-            <span class="span">🔎</span>
-        </button>
-    </nav>
+    <!-- <nav class="navbar"> -->
+        <!-- <h1 class="logo">📚 Biblio Web</h1> -->
+<!--          -->
+        <!-- <ul class="nav-link"> -->
+            <!-- <li><a href="index.php">Accueil</a></li> -->
+            <!-- <li><a href="wishlist.php">Liste de Lecture</a></li> -->
+            <!-- <li><a href="apropos.php">À propos</a></li> -->
+        <!-- </ul>  -->
+<!--          -->
+        <!-- <div class="hamburger"> -->
+            <!-- <i class="fa-solid fa-bars"></i> -->
+        <!-- </div> -->
+<!--          -->
+        <!-- <button class="button"> -->
+            <!-- <span class="span">🔎</span> -->
+        <!-- </button> -->
+    <!-- </nav> -->
+        <?php include 'includes/navbar.php'; ?>
 
     <!-- Hero Section -->
     <header class="header-details">
@@ -144,6 +145,14 @@ $image_livre = isset($images_livres[$livre['id']]) ? $images_livres[$livre['id']
 
                     <!-- Boutons d'action -->
                     <div class="book-actions">
+                            <?php if(!empty($livre['fichier_pdf'])): ?>
+                                <a href="read.php?id=<?php echo $livre['id']; ?>" class="btn-read">
+                                    <i class="fa-solid fa-book-open"></i>
+                                        Lire en ligne
+                                </a>
+                            <?php endif; ?>
+
+                            
                         <button class="btn-primary" onclick="ajouterALaListe(<?php echo $livre['id']; ?>)">
                             <i class="fa-solid fa-heart"></i>
                             Ajouter à ma liste
@@ -155,6 +164,21 @@ $image_livre = isset($images_livres[$livre['id']]) ? $images_livres[$livre['id']
     </main>
 
     <script src="js/script.js"></script>
+    <script>
+      <!-- Fonction pour ajouter un livre à la liste -->
+    function ajouterALaListe(idLivre) {
+        <?php if(isset($_SESSION['id_lecteur'])): ?>
+             <!-- Utilisateur connecté : ajouter à sa liste -->
+            window.location.href = `php/add_to_wishlist.php?id_livre=${idLivre}`;
+        <?php else: ?>
+             <!-- Utilisateur non connecté : rediriger vers login -->
+            if(confirm('Vous devez être connecté pour ajouter un livre à votre liste. Voulez-vous vous connecter ?')) {
+                window.location.href = 'login.php';
+            }
+        <?php endif; ?>
+         }
+    </script>
+   
 </body>
 </html>
 

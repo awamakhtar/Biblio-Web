@@ -157,6 +157,19 @@ $images_livres = [
     </main>
 
     <script src="js/script.js"></script>
+    <script>
+    function ajouterALaListe(idLivre) {
+        <?php if(isset($_SESSION['id_lecteur'])): ?>
+            // Utilisateur connecté : ajouter à sa liste
+            window.location.href = `php/add_to_wishlist.php?id_livre=${idLivre}`;
+        <?php else: ?>
+            // Utilisateur non connecté : rediriger vers login
+            if(confirm('Vous devez être connecté pour ajouter un livre à votre liste. Voulez-vous vous connecter ?')) {
+                window.location.href = 'login.php';
+            }
+        <?php endif; ?>
+    }
+
 </body>
 </html>
 

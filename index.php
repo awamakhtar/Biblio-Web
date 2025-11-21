@@ -16,23 +16,24 @@
             <p class="">Votre bibliothèque en ligne pour explorer,
                  lire et gérer vos livres préférés.</p>
         </div>
-        <nav class="navbar">
-            <h1 class="logo">
-                📚 Biblio Web</h1>
-            <ul class="nav-link">
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="wishlist.php">Liste de Lecture</a></li>
-                <li><a href="apropos.php">À propos</a></li>
-            </ul> 
-            <!-- bouton recherche -->
-            <button class="button">
-                <span class="span">🔎</span>
-            </button>
-             <!-- Bouton hamburger -->
-            <div class="hamburger">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-        </nav>
+        <?php include 'includes/navbar.php'; ?>
+        <!-- <nav class="navbar"> -->
+            <!-- <h1 class="logo"> -->
+                <!-- 📚 Biblio Web</h1> -->
+            <!-- <ul class="nav-link"> -->
+                <!-- <li><a href="index.php">Accueil</a></li> -->
+                <!-- <li><a href="wishlist.php">Liste de Lecture</a></li> -->
+                <!-- <li><a href="apropos.php">À propos</a></li> -->
+            <!-- </ul>  -->
+            bouton recherche
+            <!-- <button class="button"> -->
+                <!-- <span class="span">🔎</span> -->
+            <!-- </button> -->
+             Bouton hamburger
+            <!-- <div class="hamburger"> -->
+                <!-- <i class="fa-solid fa-bars"></i> -->
+            <!-- </div> -->
+        <!-- </nav> -->
     </header>
 
     <!-- Section de recherche -->

@@ -10,23 +10,26 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar">
-        <h1 class="logo">📚 Biblio Web</h1>
-        
-        <ul class="nav-link">
-            <li><a href="index.php">Accueil</a></li>
-            <li><a href="wishlist.php">Liste de Lecture</a></li>
-            <li><a href="apropos.php">À propos</a></li>
-        </ul> 
-        
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        
-        <button class="button">
-            <span class="span">🔎</span>
-        </button>
-    </nav>
+    <!-- <nav class="navbar"> -->
+        <!-- <h1 class="logo">📚 Biblio Web</h1> -->
+<!--          -->
+        <!-- <ul class="nav-link"> -->
+            <!-- <li><a href="index.php">Accueil</a></li> -->
+            <!-- <li><a href="wishlist.php">Liste de Lecture</a></li> -->
+            <!-- <li><a href="apropos.php">À propos</a></li> -->
+        <!-- </ul>  -->
+<!--          -->
+        <!-- <div class="hamburger"> -->
+            <!-- <i class="fa-solid fa-bars"></i> -->
+        <!-- </div> -->
+<!--          -->
+        <!-- <button class="button"> -->
+            <!-- <span class="span">🔎</span> -->
+        <!-- </button> -->
+    <!-- </nav> -->
+
+    <?php include 'includes/navbar.php'; ?>
+    
 
     <!-- Hero Section -->
     <header class="header-apropos">

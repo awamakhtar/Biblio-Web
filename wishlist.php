@@ -1,8 +1,16 @@
+
 <?php
+session_start();
 require_once 'php/config.php';
 
+// Vérifier si l'utilisateur est connecté
+if(!isset($_SESSION['id_lecteur'])) {
+    header('Location: login.php');
+    exit();
+}
 
-$id_lecteur = 1; 
+// ID du lecteur connecté (depuis la session)
+$id_lecteur = $_SESSION['id_lecteur'];
 
 // Requête pour récupérer la liste de lecture
 $sql = "SELECT 
@@ -19,24 +27,18 @@ $sql = "SELECT
         ORDER BY liste_lecture.date_emprunt DESC";
 
 $result = mysqli_query($connexion, $sql);
-
-// Définir $nombre_livres ICI
 $nombre_livres = mysqli_num_rows($result);
 
-// Tableau des images (comme dans details.php)
+// Tableau des images
 $images_livres = [
-    1 => 'peti-prince.jpg',
+    1 => 'petit-prince.jpg',
     2 => '1984.jpg',
     3 => 'etranger.jpg',
-    4 => 'aventure.jpg',
+    4 => 'aventure-ambigue.jpg',
     5 => 'germinal.jpg',
     6 => 'sous-orage.jpg'
 ];
-
-
-
 ?>
-
 
 
 <!DOCTYPE html>
@@ -51,25 +53,7 @@ $images_livres = [
 </head>
 <body>
 
-
-    <!-- Navbar -->
-    <nav class="navbar">
-        <h1 class="logo">📚 Biblio Web</h1>
-        
-        <ul class="nav-link">
-            <li><a href="index.php">Accueil</a></li>
-            <li><a href="wishlist.php">Liste de Lecture</a></li>
-            <li><a href="apropos.php">À propos</a></li>
-        </ul> 
-        
-        <div class="hamburger">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        
-        <button class="button">
-            <span class="span">🔎</span>
-        </button>
-    </nav>
+        <?php include 'includes/navbar.php'; ?>
 
     <!-- Hero Section -->
     <header class="header-wishlist">

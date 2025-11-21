@@ -60,28 +60,31 @@ function confirmerSuppression(idLivre, idLecteur) {
     }
 }
 
-// Fonction pour ajouter un livre à la liste
-    function ajouterALaListe(idLivre) {
-        // ID du lecteur (temporaire - à remplacer par la session)
-        const idLecteur = 1;
-        
-        // Rediriger vers le script PHP
-        window.location.href = `php/add_to_wishlist.php?id_livre=${idLivre}&id_lecteur=${idLecteur}`;
-    }
 
-    // Fonction pour partager (optionnelle)
-    function partager() {
-        if (navigator.share) {
-            navigator.share({
-                title: document.title,
-                url: window.location.href
-            }).catch(err => console.log('Erreur de partage:', err));
-        } else {
-            alert('La fonction de partage n\'est pas disponible sur votre navigateur');
-        }
-    }
-    // resultats des recherches
+
+ // resultats des recherches
     function ajouterALaListe(idLivre) {
     const idLecteur = 1;
     window.location.href = `php/add_to_wishlist.php?id_livre=${idLivre}&id_lecteur=${idLecteur}`;
 }
+
+// Toggle du menu utilisateur
+function toggleUserMenu() {
+    const dropdown = document.getElementById('userDropdown');
+    const button = document.querySelector('.user-button');
+    
+    dropdown.classList.toggle('active');
+    button.classList.toggle('active');
+}
+
+// Fermer le menu si on clique en dehors
+document.addEventListener('click', function(event) {
+    const userMenu = document.querySelector('.user-menu');
+    const dropdown = document.getElementById('userDropdown');
+    const button = document.querySelector('.user-button');
+    
+    if (userMenu && !userMenu.contains(event.target)) {
+        dropdown?.classList.remove('active');
+        button?.classList.remove('active');
+    }
+});

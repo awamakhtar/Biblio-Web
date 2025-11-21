@@ -1,11 +1,20 @@
 <?php
+session_start();
 require_once 'config.php';
 
-if(isset($_GET['id_livre']) && isset($_GET['id_lecteur'])) {
+// Vérifier si l'utilisateur est connecté
+if(!isset($_SESSION['id_lecteur'])) {
+    header('Location: ../login.php');
+    exit();
+}
+
+// Récupérer l'ID de l'utilisateur connecté
+$id_lecteur = $_SESSION['id_lecteur'];
+
+if(isset($_GET['id_livre'])) {
     $id_livre = (int)$_GET['id_livre'];
-    $id_lecteur = (int)$_GET['id_lecteur'];
     
-    // Supprimer le livre de la liste
+    // Supprimer le livre de la liste de CET utilisateur uniquement
     $sql = "DELETE FROM liste_lecture 
             WHERE id_livre = $id_livre AND id_lecteur = $id_lecteur";
     
