@@ -123,8 +123,12 @@ if(!file_exists($pdf_path)) {
         </div>
     <?php endif; ?>
 
-    <!-- Inclure PDF.js -->
+     <!-- Inclure PDF.js avec worker pour meilleures performances -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Configurer le worker pour de meilleures performances
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
     
     <script>
         <?php if(!isset($error)): ?>
@@ -134,24 +138,45 @@ if(!file_exists($pdf_path)) {
         let pageNum = 1;
         let pageRendering = false;
         let pageNumPending = null;
-        let scale = 1.5;
+        let scale = 1.2; // Réduire le scale par défaut pour charger plus vite
         const canvas = document.getElementById('pdfCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Charger le PDF
-        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
+        // Charger le PDF avec options optimisées
+        const loadingTask = pdfjsLib.getDocument({
+            url: pdfUrl,
+            cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/cmaps/',
+            cMapPacked: true,
+            // Options de performance
+            disableAutoFetch: false,
+            disableStream: false,
+            disableRange: false
+        });
+
+        loadingTask.promise.then(function(pdf) {
             pdfDoc = pdf;
             document.getElementById('totalPages').textContent = pdf.numPages;
             document.getElementById('pdfLoading').style.display = 'none';
             renderPage(pageNum);
         }).catch(function(error) {
             console.error('Erreur de chargement du PDF:', error);
-            document.getElementById('pdfLoading').innerHTML = '<i class="fa-solid fa-exclamation-triangle"></i><p>Erreur de chargement du PDF</p>';
+            document.getElementById('pdfLoading').innerHTML = '<i class="fa-solid fa-exclamation-triangle"></i><p>Erreur de chargement du PDF : ' + error.message + '</p>';
         });
 
-        // Rendre une page
+        // Rendre une page avec optimisation
         function renderPage(num) {
             pageRendering = true;
+            
+            // Afficher un message de chargement pour la page
+            const loadingMsg = document.createElement('div');
+            loadingMsg.id = 'pageLoading';
+            loadingMsg.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:white;font-size:1.2rem;';
+            loadingMsg.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Chargement de la page...';
+            
+            if(!document.getElementById('pageLoading')) {
+                document.getElementById('readerContainer').appendChild(loadingMsg);
+            }
+            
             pdfDoc.getPage(num).then(function(page) {
                 const viewport = page.getViewport({ scale: scale });
                 canvas.height = viewport.height;
@@ -165,17 +190,30 @@ if(!file_exists($pdf_path)) {
                 const renderTask = page.render(renderContext);
                 renderTask.promise.then(function() {
                     pageRendering = false;
+                    
+                    // Retirer le message de chargement
+                    const loader = document.getElementById('pageLoading');
+                    if(loader) loader.remove();
+                    
                     if (pageNumPending !== null) {
                         renderPage(pageNumPending);
                         pageNumPending = null;
                     }
+                }).catch(function(error) {
+                    console.error('Erreur de rendu:', error);
+                    const loader = document.getElementById('pageLoading');
+                    if(loader) loader.remove();
                 });
+            }).catch(function(error) {
+                console.error('Erreur récupération page:', error);
+                const loader = document.getElementById('pageLoading');
+                if(loader) loader.remove();
             });
 
             document.getElementById('currentPage').textContent = num;
         }
 
-        // File d'attente de rendu
+        // File d'attente de rendu (inchangé)
         function queueRenderPage(num) {
             if (pageRendering) {
                 pageNumPending = num;
@@ -198,13 +236,14 @@ if(!file_exists($pdf_path)) {
             queueRenderPage(pageNum);
         }
 
-        // Zoom +
+        // Zoom + (optimisé)
         function zoomIn() {
+            if(scale >= 3) return; // Limiter le zoom max
             scale += 0.2;
             queueRenderPage(pageNum);
         }
 
-        // Zoom -
+        // Zoom - (optimisé)
         function zoomOut() {
             if (scale <= 0.5) return;
             scale -= 0.2;
@@ -215,7 +254,9 @@ if(!file_exists($pdf_path)) {
         function toggleFullscreen() {
             const container = document.getElementById('readerContainer');
             if (!document.fullscreenElement) {
-                container.requestFullscreen();
+                container.requestFullscreen().catch(err => {
+                    console.log('Erreur plein écran:', err);
+                });
             } else {
                 document.exitFullscreen();
             }
@@ -225,7 +266,7 @@ if(!file_exists($pdf_path)) {
         function downloadPDF() {
             const link = document.createElement('a');
             link.href = pdfUrl;
-            link.download = '<?php echo $livre['titre']; ?>.pdf';
+            link.download = '<?php echo addslashes($livre['titre']); ?>.pdf';
             link.click();
         }
 
@@ -235,6 +276,17 @@ if(!file_exists($pdf_path)) {
             if (e.key === 'ArrowRight') nextPage();
             if (e.key === 'Escape' && document.fullscreenElement) document.exitFullscreen();
         });
+        
+        // Précharger la page suivante pour une navigation plus fluide
+        function preloadNextPage() {
+            if(pdfDoc && pageNum < pdfDoc.numPages) {
+                pdfDoc.getPage(pageNum + 1).catch(() => {});
+            }
+        }
+        
+        // Appeler le préchargement après chaque rendu
+        setInterval(preloadNextPage, 2000);
+        
         <?php endif; ?>
     </script>
 </body>

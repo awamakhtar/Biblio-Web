@@ -52,7 +52,7 @@ $is_logged_in = isset($_SESSION['id_lecteur']);
                         <i class="fa-solid fa-user"></i>
                         Mon profil
                     </a>
-                    <a href="#">
+                    <a href="historique.php">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                         Mon historique
                     </a>

@@ -3,6 +3,10 @@
 session_start();
 require_once 'php/config.php';
 
+// Mettre à jour automatiquement les statuts
+require_once 'php/update_statuts.php';
+
+
 // Vérifier si l'utilisateur est connecté
 if(!isset($_SESSION['id_lecteur'])) {
     header('Location: login.php');
@@ -170,3 +174,7 @@ $images_livres = [
     <script src="js/script.js"></script>
 </body>
 </html>
+
+<?php
+mysqli_close($connexion); 
+?>

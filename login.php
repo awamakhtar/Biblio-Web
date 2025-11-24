@@ -115,13 +115,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="auth-footer">
                     <p>Pas encore de compte ? <a href="register.php">S'inscrire</a></p>
                 </div>
-
-                <!-- Compte de test pour faciliter les tests -->
-                <div class="test-account">
-                    <p><strong>Compte de test :</strong></p>
-                    <p>Email : <code>awa@email.com</code></p>
-                    <p>Mot de passe : <code>password</code></p>
-                </div>
             </div>
 
             <div class="auth-illustration">
